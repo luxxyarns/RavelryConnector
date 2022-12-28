@@ -16,8 +16,8 @@ let package = Package(
     dependencies: [
         // Dependencies declare other packages that this package depends on.
         .package(url: "https://github.com/evgenyneu/keychain-swift", from: "20.0.0"),
-        .package(url: "https://github.com/SDWebImage/SDWebImage", from: "5.14.0"),
-        .package(url: "https://github.com/SDWebImage/SDWebImageSwiftUI", from: "2.2.0"),
+        .package(url: "https://github.com/SDWebImage/SDWebImage", from: "5.0.0"),
+        .package(url: "https://github.com/SDWebImage/SDWebImageSwiftUI", from: "2.0.0"),
         .package(url: "https://github.com/hyperoslo/Cache", from: "6.0.0"),
         .package(url: "https://github.com/OAuthSwift/OAuthSwift", from: "2.2.0"),
      ],
