@@ -18,7 +18,7 @@ struct TestApp: App {
                                                  requestTokenUrl: "https://www.ravelry.com/oauth/request_token",
                                                  authorizeUrl: "https://www.ravelry.com/oauth/authorize",
                                                  accessTokenUrl: "https://www.ravelry.com/oauth/access_token",
-                                                 scope: "forum-write message-write library-pdf",
+                                                 scope: "",
                                                  callback: "testapp://callback")
     
     init() {
@@ -40,6 +40,8 @@ struct TestApp: App {
 
 ```
 Note that consumer key & secret are the details that you get from Ravelry Pro when you create a new app (in this case a oauth 1.0a). 
+
+Regarding "scope" you can add additional items (see the Ravelry API page). 
 
 The above app uses a content view that implements a simple query to get the current user. 
 
