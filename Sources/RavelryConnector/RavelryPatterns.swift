@@ -190,7 +190,7 @@ public extension RavelryEnvironment {
         var parameters = OAuthSwift.Parameters()
         parameters["ids"] = identifiers.joined(separator: " ")
         
-        getSimpleRequest(url: "\(baseURI)/pattern.json", parameters: parameters, completedRequest: completedRequest)
+        getSimpleRequest(url: "\(baseURI)/patterns.json", parameters: parameters, completedRequest: completedRequest)
     }
     
     func getProjectsForPattern(identifier: Int, sort: String, photoless: Bool, page: Int, page_size: Int,

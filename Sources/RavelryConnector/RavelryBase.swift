@@ -16,10 +16,10 @@ public class RavelryBase: ObservableObject {
     }
     var errorTitle = ""
     var errorMessage = ""
-    @Published var focusedUser: String?
-    @Published var displayError: Bool = false
-    @Published var unreadMessages = 0
-    @Published var unreadForumReplies = 0
+    @Published public var focusedUser: String?
+    @Published  var displayError: Bool = false
+    @Published  var unreadMessages = 0
+    @Published  var unreadForumReplies = 0
 
     public static let htmlCSS = """
     <link href="https://style-cdn.ravelrycache.com/stylesheets/ravelry_legacy_1910241442.css" rel="Stylesheet" type="text/css" />
