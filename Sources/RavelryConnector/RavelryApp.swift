@@ -1,3 +1,6 @@
+// Ravelry Connector - to help connecting with the Ravelry API: https://www.ravelry.com/api
+// (C) 2022 by Marco Nissen
+ 
 import Foundation
 import OAuthSwift
 

@@ -1,3 +1,6 @@
+// Ravelry Connector - to help connecting with the Ravelry API: https://www.ravelry.com/api
+// (C) 2022 by Marco Nissen
+
 import Foundation
 import OAuthSwift
 
@@ -7,7 +10,7 @@ public extension RavelryEnvironment {
         var parameters = OAuthSwift.Parameters()
         parameters["page"] = page
         parameters["page_size"] = page_size
-
+        
         getPaginatedRequest(resultsKey: "deliveries", url: "\(baseURI)/deliveries/list.json", parameters: parameters, completedRequest: completedRequest)
     }
 }

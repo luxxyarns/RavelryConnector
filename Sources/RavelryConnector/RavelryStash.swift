@@ -1,3 +1,6 @@
+// Ravelry Connector - to help connecting with the Ravelry API: https://www.ravelry.com/api
+// (C) 2022 by Marco Nissen
+
 import Foundation
 import OAuthSwift
 import UIKit
@@ -9,11 +12,11 @@ public extension RavelryEnvironment {
         parameters["sort"] = sort
         parameters["page"] = page
         parameters["page_size"] = page_size
-
+        
         getPaginatedRequest(resultsKey: "comments", url: "\(baseURI)/people/\(username)/stash/\(identifier)/comments.json",
                             parameters: parameters, completedRequest: completedRequest)
     }
-
+    
     func createStash(username: String,
                      data: OAuthSwift.Parameters,
                      completedRequest: @escaping (_ json: [String: Any]?) -> Void) {
@@ -21,7 +24,7 @@ public extension RavelryEnvironment {
             if err != nil { print ("error in post request: \(err!.description)") }
         })
     }
-
+    
     func createStashPhoto(username: String,
                           identifier: Int,
                           image_id: Int? = nil,
@@ -38,11 +41,11 @@ public extension RavelryEnvironment {
             if err != nil { print ("error in post request: \(err!.description)") }
         })
     }
-
+    
     func deleteStash(username: String, identifier: Int, completedRequest: @escaping (_ json: [String: Any]?) -> Void) {
         deleteSimpleRequest(url: "\(baseURI)/people/\(username)/stash/\(identifier).json", completedRequest: completedRequest)
     }
-
+    
     func getStashList(username: String, sort: String, include: [String], page: Int, page_size: Int,
                       completedRequest: @escaping (_ json: [[String: Any]]?, _ pageCount: Int, _ page: Int, _ pageSize: Int, _ lastPage: Int, _ results: Int) -> Void) {
         var parameters = OAuthSwift.Parameters()
@@ -50,10 +53,10 @@ public extension RavelryEnvironment {
         parameters["sort"] = sort
         parameters["page"] = page
         parameters["page_size"] = page_size
-
+        
         getPaginatedRequest(resultsKey: "stash", url: "\(baseURI)/people/\(username)/stash/list.json", parameters: parameters, username: username, completedRequest: completedRequest)
     }
-
+    
     func reorderStashPhotos(username: String,
                             identifier: Int,
                             sort_order: String,
@@ -64,7 +67,7 @@ public extension RavelryEnvironment {
             if err != nil { print ("error in post request: \(err!.description)") }
         })
     }
-
+    
     func searchStash(query: String, sort: String, additionalParameters: [String: String]? = nil, page: Int, page_size: Int,
                      completedRequest: @escaping (_ json: [[String: Any]]?, _ pageCount: Int, _ page: Int, _ pageSize: Int, _ lastPage: Int, _ results: Int) -> Void) {
         var parameters = OAuthSwift.Parameters()
@@ -75,18 +78,18 @@ public extension RavelryEnvironment {
         parameters["sort"] = sort
         parameters["page"] = page
         parameters["page_size"] = page_size
-
+        
         getPaginatedRequest(resultsKey: "stashes", url: "\(baseURI)/stash/search.json", parameters: parameters, completedRequest: completedRequest)
     }
-
+    
     func showStash(username: String, identifier: Int, include: [String],
                    completedRequest: @escaping (_ json: [String: Any]?) -> Void) {
         var parameters = OAuthSwift.Parameters()
         parameters["include"] = include.joined(separator: " ")
-
+        
         getSimpleRequest(url: "\(baseURI)/people/\(username)/stash/\(identifier).json", parameters: parameters, completedRequest: completedRequest)
     }
-
+    
     func updateStash(username: String,
                      identifier: Int,
                      data: OAuthSwift.Parameters,
@@ -95,7 +98,7 @@ public extension RavelryEnvironment {
             if err != nil { print ("error in post request: \(err!.description)") }
         })
     }
-
+    
     private func attachStashPhoto(username: String, identifier: Int, image_id: Int,
                                   success: @escaping () -> Void,
                                   failure: @escaping(_ err: OAuthSwiftError?) -> Void,
@@ -105,27 +108,27 @@ public extension RavelryEnvironment {
                                  identifier: identifier,
                                  image_id: image_id,
                                  completedRequest: { photojson in
-                                     if let j = photojson {
-                                         print(j)
-                                         if let status_token = j["status_token"] as? String {
-                                             self.pollingPhotoStatus(status_token, success: { (_ photo_id) in
-                                                 env.updatePhoto(photo_id: photo_id,
-                                                                 x_offset: 0, y_offset: 0,
-                                                                 copyright_notice: username,
-                                                                 caption: "",
-                                                                 completedRequest: { _ in
-                                                                     success()
-                                                 }, failure:  { (err) in
-                                                     if err != nil { print ("error in post request: \(err!.description)") }
-                                                 })
-                                             }, failure: failure, progressUpdate: progressUpdate)
-                                         }
-                                     }
-
+                if let j = photojson {
+                    print(j)
+                    if let status_token = j["status_token"] as? String {
+                        self.pollingPhotoStatus(status_token, success: { (_ photo_id) in
+                            env.updatePhoto(photo_id: photo_id,
+                                            x_offset: 0, y_offset: 0,
+                                            copyright_notice: username,
+                                            caption: "",
+                                            completedRequest: { _ in
+                                success()
+                            }, failure:  { (err) in
+                                if err != nil { print ("error in post request: \(err!.description)") }
+                            })
+                        }, failure: failure, progressUpdate: progressUpdate)
+                    }
+                }
+                
             })
         }
     }
-
+    
     func uploadStashPhoto(username: String, identifier: Int, image: UIImage,
                           success: @escaping () -> Void,
                           failure: @escaping(_ err: OAuthSwiftError?) -> Void,

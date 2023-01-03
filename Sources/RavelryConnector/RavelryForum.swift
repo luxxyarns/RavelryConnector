@@ -1,3 +1,6 @@
+// Ravelry Connector - to help connecting with the Ravelry API: https://www.ravelry.com/api
+// (C) 2022 by Marco Nissen
+
 import Foundation
 import OAuthSwift
 
@@ -110,7 +113,6 @@ public extension RavelryEnvironment {
         searchGroups(query: name.replacingOccurrences(of: "-", with: " ").lowercased(),
                      sort: "", page: 1, page_size: 100) { (json, pageCount, page, pageSize, lastPage, results) in
                         if let json = json, json.count > 0  {
-                            var found = false
                             for set in json {
                                 if  let checkIdentifier = set["forum_id"] as? Int,  checkIdentifier == identifier {
                                     var badge_url = ""
@@ -130,7 +132,6 @@ public extension RavelryEnvironment {
                                     if  let flag = set["mature"] as? Int {
                                         mature = flag
                                     }
-                                    found = true
                                     do {
                                         try self.storeForumDescriptionToCache(value: ForumDescription(name: name, banner_url: banner_url,  badge_url: badge_url, identifier: identifier, short_description: description, mature: mature,  date: Date()), forKey: name)
                                     } catch let err {

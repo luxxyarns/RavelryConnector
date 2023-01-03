@@ -1,3 +1,6 @@
+// Ravelry Connector - to help connecting with the Ravelry API: https://www.ravelry.com/api
+// (C) 2022 by Marco Nissen
+
 import Foundation
 import KeychainSwift
 import OAuthSwift
@@ -20,7 +23,7 @@ public class RavelryBase: ObservableObject {
     @Published  var displayError: Bool = false
     @Published  var unreadMessages = 0
     @Published  var unreadForumReplies = 0
-
+    
     public static let htmlCSS = """
     <link href="https://style-cdn.ravelrycache.com/stylesheets/ravelry_legacy_1910241442.css" rel="Stylesheet" type="text/css" />
     <link href="https://style-cdn.ravelrycache.com/stylesheets/ravelry_components_1910241442.css" rel="Stylesheet" type="text/css" />

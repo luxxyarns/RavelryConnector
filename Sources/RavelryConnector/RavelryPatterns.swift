@@ -1,3 +1,6 @@
+// Ravelry Connector - to help connecting with the Ravelry API: https://www.ravelry.com/api
+// (C) 2022 by Marco Nissen
+
 import Foundation
 import OAuthSwift
 import Cache 
@@ -72,16 +75,11 @@ public struct PatternCache : Codable {
        
     static func getTrend(_ permalink : String) -> PatternTrend? {
         let history = getHistory(permalink)
-        var historyDates = history.keys.sorted { (A, B) -> Bool in
+        let historyDates = history.keys.sorted { (A, B) -> Bool in
             let h1 = minutesFromNow(A)
             let h2 = minutesFromNow(B)
             return h1 > h2
         }
-        let now = Date()
-       /* historyDates.removeAll { (A) -> Bool in
-              let c = Calendar.current.dateComponents([.hour], from: A, to: now).hour!
-            return c > 14 * 24
-        }*/
         var xs = [Double]()
         var ys = [Double]()
         for date in historyDates {
@@ -108,11 +106,8 @@ public struct PatternCache : Codable {
                 return .stable
             }
         }
-        //print(slope(xs, ys))
-       // return nil
     }
-    
-    
+ 
     static   func average(_ input: [Double]) -> Double {
         return input.reduce(0, +) / Double(input.count)
     }

@@ -1,3 +1,6 @@
+// Ravelry Connector - to help connecting with the Ravelry API: https://www.ravelry.com/api
+// (C) 2022 by Marco Nissen
+
 import Cache
 import Foundation
 import KeychainSwift
@@ -13,7 +16,7 @@ public class RavelryEnvironment: ObservableObject {
     var authorizeURI: String = ""
     var tokenURI: String = ""
     var scope: String = ""
-     var oauth1swift: OAuth1Swift?
+    var oauth1swift: OAuth1Swift?
     var oauth2swift: OAuth2Swift?
     var callback: String = ""
     var oauthMode: RavelryOauthMode = .oauth2
@@ -23,7 +26,7 @@ public class RavelryEnvironment: ObservableObject {
     var forumPageSize: Int = 25
     var storage: Storage<String, EtagData>?
     var storageForumDescription: Storage<String, ForumDescription>?
-      
+    
     public init(identifier: String,
                 consumerKey: String,
                 consumerSecret: String,
@@ -41,10 +44,10 @@ public class RavelryEnvironment: ObservableObject {
         self.scope = scope.replacingOccurrences(of: " ", with: "%20")
         self.oauth2swift = nil
         self.oauth1swift = OAuth1Swift(consumerKey: consumerKey,
-                                      consumerSecret: consumerSecret,
-                                      requestTokenUrl: self.requestTokenUrl,
-                                      authorizeUrl: self.authorizeUrl,
-                                      accessTokenUrl: self.accessTokenUrl)
+                                       consumerSecret: consumerSecret,
+                                       requestTokenUrl: self.requestTokenUrl,
+                                       authorizeUrl: self.authorizeUrl,
+                                       accessTokenUrl: self.accessTokenUrl)
         
         let diskConfig = DiskConfig(name: "hardware")
         let diskConfig2 = DiskConfig(name: "hardwareForumDescription")
@@ -63,12 +66,12 @@ public class RavelryEnvironment: ObservableObject {
     }
     
     public init(identifier: String,
-         clientID: String,
-         secretID: String,
-         authorizeURI: String,
-         tokenURI: String,
-         scope: String,
-         callback: String) {
+                clientID: String,
+                secretID: String,
+                authorizeURI: String,
+                tokenURI: String,
+                scope: String,
+                callback: String) {
         self.identifier = identifier
         self.authorizeURI = authorizeURI
         self.callback = callback
@@ -104,7 +107,7 @@ public class RavelryEnvironment: ObservableObject {
         }
     }
     
-  
+    
     public func storeToCache(value: EtagData, forKey: String) throws {
         if let s = storage {
             try s.setObject(value, forKey: forKey)
@@ -169,14 +172,12 @@ public class RavelryEnvironment: ObservableObject {
                          scope: scope,
                          state: stateItem) { result in
                 switch result {
-                case let .success(result):
+                case .success:
                     self.storeCredentialsInKeychain()
                     completedRequest()
                 case let .failure(error):
                     print(error)
                     failedRequest()
-                default:
-                    print("nothing")
                 }
             }
         }
@@ -184,15 +185,11 @@ public class RavelryEnvironment: ObservableObject {
             oa.authorize(withCallbackURL: URL(string: callback)!) { result in
                 switch result {
                 case .success:
-                    // let val = result.map { OAuthSwift.TokenSuccess($0) }
-                    //     self.storeCredentialsInKeychain()
                     completedRequest()
                 case .failure:
                     let error = result.mapError { $0 }
                     print(error)
                     failedRequest()
-                default:
-                    print("nothing")
                 }
             }
         }
@@ -281,8 +278,6 @@ public class RavelryEnvironment: ObservableObject {
                     success(result)
                 case let .failure(error):
                     failure(error)
-                default:
-                    print("nothing")
                 }
             }
         }
@@ -297,8 +292,6 @@ public class RavelryEnvironment: ObservableObject {
                     success(result)
                 case let .failure(error):
                     failure(error)
-                default:
-                    print("nothing")
                 }
             }
         }
@@ -376,8 +369,6 @@ public class RavelryEnvironment: ObservableObject {
                             failure(error)
                             self.runningRequest = nil
                             self.checkRequestQueue()
-                        default:
-                            print("nothing")
                         }
                     }
                 }
@@ -391,8 +382,6 @@ public class RavelryEnvironment: ObservableObject {
         }
         
         if let oa = self.oauth1swift {
-            var p = OAuthSwift.Parameters()
-            if parameters != nil { p = parameters! }
             print("invoke startAuthorizedRequest")
             
             if oa.client.credential.oauthToken != "", !oa.client.credential.isTokenExpired() {
@@ -408,8 +397,6 @@ public class RavelryEnvironment: ObservableObject {
                             case let .failure(error):
                                 failure(error)
                                 self.displayErrorMessage(error: error, url: url, method: method, parameters: parameters, success: success, failure: failure)
-                            default:
-                                print("nothing")
                             }
                             self.runningRequest = nil
                             self.checkRequestQueue()
@@ -422,8 +409,6 @@ public class RavelryEnvironment: ObservableObject {
                             case let .failure(error):
                                 failure(error)
                                 self.displayErrorMessage(error: error, url: url, method: method, parameters: parameters, success: success, failure: failure)
-                            default:
-                                print("nothing")
                             }
                             self.runningRequest = nil
                             self.checkRequestQueue()
@@ -438,8 +423,6 @@ public class RavelryEnvironment: ObservableObject {
                             case let .failure(error):
                                 failure(error)
                                 self.displayErrorMessage(error: error, url: url, method: method, parameters: parameters, success: success, failure: failure)
-                            default:
-                                print("nothing")
                             }
                             self.runningRequest = nil
                             self.checkRequestQueue()
@@ -452,8 +435,6 @@ public class RavelryEnvironment: ObservableObject {
                             case let .failure(error):
                                 failure(error)
                                 self.displayErrorMessage(error: error, url: url, method: method, parameters: parameters, success: success, failure: failure)
-                            default:
-                                print("nothing")
                             }
                             self.runningRequest = nil
                             self.checkRequestQueue()
@@ -468,8 +449,6 @@ public class RavelryEnvironment: ObservableObject {
                             case let .failure(error):
                                 failure(error)
                                 self.displayErrorMessage(error: error, url: url, method: method, parameters: parameters, success: success, failure: failure)
-                            default:
-                                print("nothing")
                             }
                             self.runningRequest = nil
                             self.checkRequestQueue()
@@ -483,8 +462,6 @@ public class RavelryEnvironment: ObservableObject {
                             case let .failure(error):
                                 failure(error)
                                 self.displayErrorMessage(error: error, url: url, method: method, parameters: parameters, success: success, failure: failure)
-                            default:
-                                print("nothing")
                             }
                             self.runningRequest = nil
                             self.checkRequestQueue()
@@ -494,7 +471,7 @@ public class RavelryEnvironment: ObservableObject {
                     print("not yet supported")
                 }
             } else {
-                var item = RequestQueuePackage(url: url,
+                let item = RequestQueuePackage(url: url,
                                                headers: headers,
                                                method: method,
                                                parameters: parameters,
@@ -506,7 +483,7 @@ public class RavelryEnvironment: ObservableObject {
                     switch result {
                     case let .success(result):
                         self.storeCredentialsInKeychain()
-
+                        
                         print(result)
                         self.runningRequest = nil
                         self.enqueueRequest(url: url, method: method, parameters: parameters, success: success, failure: failure)
@@ -514,10 +491,7 @@ public class RavelryEnvironment: ObservableObject {
                         print(error)
                         self.runningRequest = nil
                         self.displayErrorMessage(error: error, url: url, method: method, parameters: parameters, success: success, failure: failure)
-                    default:
-                        print("nothing")
                     }
-                    //                        runningRequest = nil
                     self.checkRequestQueue()
                 }
             }
@@ -534,24 +508,6 @@ public class RavelryEnvironment: ObservableObject {
         print(url)
         RavelryBase.shared.errorTitle = "failure"
         RavelryBase.shared.errorMessage = "Could not successfully request data from Ravelry"
-        
-        /* let alert = UIAlertController(title: "Failure", message: "Could not successfully request data from Ravelry", preferredStyle: UIAlertController.Style.alert)
-         alert.addAction(UIAlertAction(title: "OK", style: UIAlertAction.Style.default, handler: { _ in
-         failure(error)
-         
-         }))
-         alert.addAction(UIAlertAction(title: "Try Again", style: .default, handler: { _ in
-         self.runningRequest = nil
-         self.enqueueRequest(url: url, method: method, parameters: parameters, success: success, failure: failure)
-         
-         }))
-         
-         if let popoverPresentationController = alert.popoverPresentationController {
-         popoverPresentationController.sourceView = viewc!.view
-         popoverPresentationController.sourceRect = viewc!.view.bounds
-         }
-         viewc?.top!.present(alert, animated: true, completion: nil)
-         */
         RavelryBase.shared.displayError = true
     }
     
@@ -589,7 +545,9 @@ public class RavelryEnvironment: ObservableObject {
                 if let p = parameters {
                     if var qi = uc.queryItems {
                         for anItem in p {
-                            qi.append(URLQueryItem(name: anItem.key, value: anItem.value as! String))
+                            if let value = anItem.value as? String {
+                                qi.append(URLQueryItem(name: anItem.key, value: value))
+                            }
                         }
                     }
                 }
@@ -619,10 +577,7 @@ public class RavelryEnvironment: ObservableObject {
             }
             env.get(url: url, headers: headers, parameters: parameters, success: { response in
                 do {
-                    // print(headers)
-                    // print( response.response.statusCode )
-                    
-                    if  response.response.statusCode  == 304 { // not modified
+                    if  response.response.statusCode  == 304 {
                         if let jsonString = foundEtagData {
                             if  let data = jsonString.data(using: .utf8, allowLossyConversion: false)  {
                                 if let res =  try? JSONSerialization.jsonObject(with: data, options: .mutableContainers) as? [String:Any]{
@@ -737,8 +692,6 @@ public class RavelryEnvironment: ObservableObject {
         }
     }
     
-    
-    
     public func checkExtras(_ json: [String: Any]?) {
         if let j = json {
             if let extras = j["extras"] as? [String: Any] {
@@ -756,17 +709,17 @@ public class RavelryEnvironment: ObservableObject {
                     RavelryBase.shared.unreadMessages = unreadMessages
                     RavelryBase.shared.unreadForumReplies = unreadForumReplies
                 }
-                
-                let application = UIApplication.shared
-                if #available(iOS 10.0, *) {
-                    let center = UNUserNotificationCenter.current()
-                    center.requestAuthorization(options: [.badge, .alert, .sound]) { _, _ in }
-                } else {
-                    application.registerUserNotificationSettings(UIUserNotificationSettings(types: [.alert, .badge, .sound], categories: nil))
-                }
-                application.registerForRemoteNotifications()
-                application.applicationIconBadgeNumber = unreadMessages + unreadForumReplies
-                
+                /*
+                 let application = UIApplication.shared
+                 if #available(iOS 10.0, *) {
+                 let center = UNUserNotificationCenter.current()
+                 center.requestAuthorization(options: [.badge, .alert, .sound]) { _, _ in }
+                 } else {
+                 application.registerUserNotificationSettings(UIUserNotificationSettings(types: [.alert, .badge, .sound], categories: nil))
+                 }
+                 application.registerForRemoteNotifications()
+                 application.applicationIconBadgeNumber = unreadMessages + unreadForumReplies
+                 */
             }
         }
     }
